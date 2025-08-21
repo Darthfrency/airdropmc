@@ -83,7 +83,7 @@ public class AirDropSpawner {
 			
 		}
 		for( ServerPlayer player :overworld.getServer().getPlayerList().getPlayers()) {
-            Component comp = Component.literal("\"Hai ricevuto un messaggio radio: <<Un pacco di approvigionamento sta atterrando alle coordinate X:\"+x+\" Z:\"+z+\">>\" ").withStyle((Style)->Style.withColor(Color.MAGENTA.getRGB()));
+            Component comp = Component.literal("\"Hai ricevuto un messaggio radio: <<Un pacco di approvigionamento sta atterrando alle coordinate X:"+x+" Z:"+z+">>").withStyle((Style)->Style.withColor(Color.MAGENTA.getRGB()));
 			player.sendSystemMessage(comp);
 		}
 	}
