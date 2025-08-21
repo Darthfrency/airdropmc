@@ -1,5 +1,7 @@
 package com.darth.airdropmc;
 
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import org.joml.Math;
 
 import com.darth.airdropmc.config.AirDropMcCommonConfigs;
@@ -21,6 +23,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraftforge.common.world.ForgeChunkManager;
+
+import java.awt.*;
 
 public class AirDropSpawner {
 	public static void spawn(ServerLevel overworld, EntityType<?> airdroptype) {
@@ -79,7 +83,8 @@ public class AirDropSpawner {
 			
 		}
 		for( ServerPlayer player :overworld.getServer().getPlayerList().getPlayers()) {
-			player.sendChatMessage(OutgoingChatMessage.create(PlayerChatMessage.system("Hai ricevuto un messaggio radio: <<Un pacco di approvigionamento sta atterrando alle coordinate X:"+x+" Z:"+z+">>" )), false, ChatType.bind(ChatType.CHAT, player));
+            Component comp = Component.literal("\"Hai ricevuto un messaggio radio: <<Un pacco di approvigionamento sta atterrando alle coordinate X:\"+x+\" Z:\"+z+\">>\" ").withStyle((Style)->Style.withColor(Color.MAGENTA.getRGB()));
+			player.sendSystemMessage(comp);
 		}
 	}
 }
