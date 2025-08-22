@@ -3,12 +3,15 @@ package com.darth.airdropmc;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.client.event.RenderTooltipEvent;
+import org.checkerframework.checker.units.qual.A;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 
 import com.darth.airdropmc.config.AirDropMcCommonConfigs;
@@ -59,21 +62,21 @@ public class AirDropSpawner {
 
 		//
 		//}
-        final int finx =x;
-        final int finz =z;
+        final int finX =x;
+        final int finZ =z;
         CompletableFuture.runAsync(()->{
-            BlockPos owner = new BlockPos(finx,0 , finz);
+            BlockPos owner = new BlockPos(finX,0 , finZ);
             ChunkPos chunkPos= overworld.getChunkAt(owner).getPos();
             for(int i = 0; i<3; i++){
                 for(int j= 0; j<3; j++){
                     ForgeChunkManager.forceChunk(overworld, AirDropMc.MOD_ID, owner, chunkPos.x+i-1, chunkPos.z+i-1, true, false);
                     }
             }
-            int y = overworld.getHeight(Types.WORLD_SURFACE, finx, finz);
+            int y = overworld.getHeight(Types.WORLD_SURFACE, finX, finZ);
             AirDropMc.LOGGER.debug(y+"");
             SummonAirdropCallBack callback;
 
-            BlockPos airDropPos = new BlockPos(finx,y+80,finz);
+            BlockPos airDropPos = new BlockPos(finX,y+80,finZ);
             callback = new SummonAirdropCallBack(airdroptype, airDropPos);
             CallBackScheduler.registerCallBack(overworld, callback, (long)20*AirDropMcCommonConfigs.TIMETOWAITAFTERTHESPAWNOFTHEAIRDROP.get());
 
@@ -82,12 +85,12 @@ public class AirDropSpawner {
                 int amount = AirDropMcCommonConfigs.AMOUNTTOSPAWN.get().get(i);
                 String mobName = AirDropMcCommonConfigs.MOBFORSPAWN.get().get(i);
                 for (int j = 0; j < amount; j++) {
-                    int newx = finx + (int) (Math.random() * 15);
-                    int newz = finz + (int) (Math.random() * 15);
-                    tPos = new BlockPos(newx, 0, newz);
+                    int newX = finX + (int) (Math.random() * 15);
+                    int newZ = finZ + (int) (Math.random() * 15);
+                    tPos = new BlockPos(newX, 0, newZ);
                     chunkPos = overworld.getChunkAt(tPos).getPos();
-                    y = overworld.getHeight(Types.WORLD_SURFACE, newx, newz);
-                    BlockPos pos = new BlockPos(newx, y, newz);
+                    y = overworld.getHeight(Types.WORLD_SURFACE, newX, newZ);
+                    BlockPos pos = new BlockPos(newX, y, newZ);
                     EntityType<?> entityType = EntityType.byString(mobName).get();
                     Entity entity = entityType.spawn(overworld, pos, MobSpawnType.TRIGGERED);
                     CompoundTag tag = new CompoundTag();
@@ -110,15 +113,13 @@ public class AirDropSpawner {
     private static void SpawnLogic(){
 
     }
-    private static boolean isBiomeSuitable(Holder<Biome> biome){
-        boolean condition=  biome.is(Biomes.OCEAN)||
-                biome.is(Biomes.DEEP_OCEAN) ||
-                biome.is(Biomes.WARM_OCEAN) ||
-                biome.is(Biomes.LUKEWARM_OCEAN) ||
-                biome.is(Biomes.COLD_OCEAN) ||
-                biome.is(Biomes.FROZEN_OCEAN) ||
-                biome.is(Biomes.RIVER) ||
-                biome.is(Biomes.FROZEN_RIVER);
+    public static void tick()
+    {
+
+    }
+    private static boolean isBiomeSuitable(@NotNull Holder<Biome> biome){
+        AirDropMc.LOGGER.debug(biome.get().toString());
+        boolean condition=  biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER);
         return !condition;
     }
 }
