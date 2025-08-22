@@ -19,7 +19,7 @@ public class ForgeEventBusEvents {
 	@SubscribeEvent
 	 public static void serverTickEvent(ServerTickEvent event)
     {
-
+        AirDropSpawner.tick();
 		ServerLevel overworld =event.getServer().getLevel(ServerLevel.OVERWORLD);
 		if (LASTTICK== overworld.getGameTime()) {
 			return;
