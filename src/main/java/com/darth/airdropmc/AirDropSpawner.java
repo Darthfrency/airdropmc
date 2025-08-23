@@ -72,7 +72,6 @@ public class AirDropSpawner {
                     tempPos= new BlockPos(x,i,z);
                     BlockState block =overworld.getBlockState(tempPos);
                     if(block.isAir()){
-                        AirDropMc.LOGGER.debug("found air block at y" +i);
                         continue;
                     };
                     if(block.is(Blocks.WATER) || block.is(Blocks.LAVA)){
